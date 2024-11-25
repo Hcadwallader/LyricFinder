@@ -42,28 +42,15 @@ export default function Selection() {
 	return (
 		<div className="App container">
 			<h1>Lyric lookup</h1>
-			{/* <select className="item">
-				<option value="">Please select an artist</option>
-				<option value="mcfly">Mcfly</option>
-				<option value="dizzy">Dizzee Rascal</option>
-				<option value="jayz">JAY-Z</option>
-			</select>
-			<select className="item">
-				<option value="">Please select an song</option>
-				<option value="mcfly">Mcfly</option>
-				<option value="dizzy">Dizzee Rascal</option>
-				<option value="jayz">JAY-Z</option>{' '}
-			</select>{' '}
-			*/}
 			<select
 				className="item"
 				name="artist"
 				value={artist}
 				onChange={handleArtist}
 			>
-				{artistList.map((artist) => {
+				{artistList.map((artist, index) => {
 					<option
-						key={artist.id}
+						key={index}
 						value={artist.name}
 						onSelect={() => handleArtist(artist, i)}
 					>
