@@ -55,17 +55,20 @@ export default function Selection() {
 				<option value="jayz">JAY-Z</option>{' '}
 			</select>{' '}
 			*/}
-			<select name="artist" value={artist} onChange={handleArtist}>
-				{Object.entries(artistList).map((artist, index) => {
-					return (
-						<option
-							key={index}
-							value={artist.name}
-							onSelect={() => handleArtist(artist, i)}
-						>
-							{artist}
-						</option>
-					);
+			<select
+				className="item"
+				name="artist"
+				value={artist}
+				onChange={handleArtist}
+			>
+				{artistList.map((artist) => {
+					<option
+						key={artist.id}
+						value={artist.name}
+						onSelect={() => handleArtist(artist, i)}
+					>
+						{artist.name}
+					</option>;
 				})}
 			</select>
 			<button className="item" onClick={(e) => handleSubmit(e)}>
