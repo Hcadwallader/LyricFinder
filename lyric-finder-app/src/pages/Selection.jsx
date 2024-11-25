@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getArtistId } from '../services/musicService';
+import {getArtistId, getArtistSongs, getLyrics} from '../services/musicService';
 import { useNavigate } from 'react-router-dom';
 
 export default function Selection() {
@@ -32,6 +32,8 @@ export default function Selection() {
 
 	const handleSubmit = (e, artist, song) => {
 		console.log(e, artist, song);
+		var songs = getArtistSongs('McFly');
+		var lyrics = getLyrics('random song');
 		navigate('/lyrics');
 	};
 
