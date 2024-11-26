@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import {getArtistId, getArtistSongs, getLyrics} from '../services/musicService';
+import {
+	getArtistId,
+	getArtistSongs,
+	getLyrics,
+} from '../services/musicService';
 import { useNavigate } from 'react-router-dom';
 
 export default function Selection() {
@@ -8,9 +12,11 @@ export default function Selection() {
 	const [artistList, setArtistList] = useState([
 		{ id: '47izDDvtOxxz3FzHYuUptd', name: 'Mcfly' },
 		{ id: '0gusqTJKxtU1UTmNRMHZcv', name: 'Dizzee Rascal' },
-		{ id: '3nFkdlSjzX9mRTtwJOzDYB', name: 'JAY-Z' },
+		{ id: '5K4W6rqBFWDnAN6FQUkS6x', name: 'JAY-Z' },
 	]);
-	const [artist, setArtist] = useState('Please select artist');
+	const [artistId, setArtistId] = useState('Please select artist');
+	const [songList, setSongList] = useState([]);
+	const [songId, setSongId] = useState('Please select song');
 
 	// const lookupArtistIds = async () => {
 	// 	for (let a of artists) {
@@ -30,15 +36,20 @@ export default function Selection() {
 	// 	lookupArtistIds();
 	// }, []);
 
-	const handleSubmit = (e, artist, song) => {
-		console.log(e, artist, song);
-		var songs = getArtistSongs('McFly');
+	const handleSubmit = (e) => {
 		var lyrics = getLyrics('random song');
 		navigate('/lyrics');
 	};
 
 	const handleArtist = (e) => {
-		console.log(e);
+		setArtistId(e.target.value);
+		let songs = getArtistSongs(e.target.value);
+		console.log(songs);
+		setSongList(songs);
+	};
+
+	const handleSong = (e) => {
+		setSongId(e.target.value);
 	};
 
 	return (
@@ -47,19 +58,37 @@ export default function Selection() {
 			<select
 				className="item"
 				name="artist"
-				value={artist}
-				onChange={handleArtist}
+				value={artistId}
+				onChange={(e) => handleArtist(e)}
+				defaultValue={''}
 			>
+				<option value="">{'Please select an artist'}</option>
 				{artistList.map((artist, index) => {
-					<option
-						key={index}
-						value={artist.name}
-						onSelect={() => handleArtist(artist, i)}
-					>
-						{artist.name}
-					</option>;
+					return (
+						<option key={index} value={artist.id}>
+							{artist.name}
+						</option>
+					);
 				})}
 			</select>
+			{songList.length > 1 && (
+				<select
+					className="item"
+					name="songList"
+					value={songId}
+					onChange={(e) => handleSong(e)}
+					defaultValue={''}
+				>
+					<option value="">{'Please select an song'}</option>
+					{songList.map((song, index) => {
+						return (
+							<option key={index} value={song.id}>
+								{song.name}
+							</option>
+						);
+					})}
+				</select>
+			)}
 			<button className="item" onClick={(e) => handleSubmit(e)}>
 				Submit
 			</button>

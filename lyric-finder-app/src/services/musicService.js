@@ -4,7 +4,6 @@ const baseUrl = 'https://api.spotify.com/v1/';
 const loginUrl = 'https://accounts.spotify.com/api/token';
 
 export const getArtistId = async (artistName) => {
-
 	var authToken = await getAuthToken();
 	let artistIdResponse = await fetch(
 		`${baseUrl}search?q=${artistName}&type=artist`,
@@ -17,21 +16,19 @@ export const getArtistId = async (artistName) => {
 	);
 
 	let data = await artistIdResponse.json();
-	console.log("Data returned from searching for artist: ")
+	console.log('Data returned from searching for artist: ');
 	console.log(data);
 
-	if(data.artists != null) {
-		console.log("returning " + data.artists.items[0].id)
+	if (data.artists != null) {
+		console.log('returning ' + data.artists.items[0].id);
 		return data.artists.items[0].id;
 	}
 };
 
-export const getArtistSongs = async (artistName) => {
-
-	var artistId = await getArtistId(artistName);
+export const getArtistSongs = async (artistID) => {
 	var authToken = await getAuthToken();
 	let artistDetailsResponse = await fetch(
-		`${baseUrl}artists/${artistId}/top-tracks`,
+		`${baseUrl}artists/${artistID}/top-tracks`,
 		{
 			method: 'GET',
 			headers: {
@@ -41,23 +38,21 @@ export const getArtistSongs = async (artistName) => {
 	);
 
 	let data = await artistDetailsResponse.json();
-	console.log("Data returned from searching for songs for artist: ")
+	console.log('Data returned from searching for songs for artist: ');
 	console.log(data);
 
-	if(data.tracks != null) {
+	if (data.tracks != null) {
 		let trackList = [];
-		data.tracks.forEach(track => {
-			trackList.push({'id': track.id, 'name': track.name});
-		})
-		console.log("track list: ");
+		data.tracks.forEach((track) => {
+			trackList.push({ id: track.id, name: track.name });
+		});
+		console.log('track list: ');
 		console.log(trackList);
 		return trackList;
 	}
-
-}
+};
 
 export const getLyrics = (songName) => {
-
 	return `It's all about you (it's about you)
 It's all about you, baby (it's all about)
 It's all about you (it's about you)
@@ -91,13 +86,12 @@ It's all about you, baby (it's all about you)
 It's all about you (it's about you)
 It's all about you
 It's all about you`;
-}
+};
 
 export const getAuthToken = async () => {
-
 	// TODO: add code here to check if we have an unexpired token already, before getting a fresh one
 
-	console.log("getting fresh auth token");
+	console.log('getting fresh auth token');
 
 	var client_id = '2eb5efccbdd64e9daca506b2a9de7e9e';
 	var client_secret = '7f1a0d75767441f7bc7c83bb319d00ea';
@@ -118,10 +112,13 @@ export const getAuthToken = async () => {
 
 	let successfulLogin = authTokenResponse.status;
 	if (successfulLogin && !authTokenResponse.ok) {
-		console.log("got the successful login, but the auth token response wasn't ok: " + authTokenResponse.status);
+		console.log(
+			"got the successful login, but the auth token response wasn't ok: " +
+				authTokenResponse.status
+		);
 		return null;
 	}
 	let data = await authTokenResponse.json();
 	window.localStorage.setItem('token', data.access_token);
 	return data.access_token;
-}
+};
