@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+import { useState } from 'react';
 
 const baseUrl = 'https://api.spotify.com/v1/';
 const loginUrl = 'https://accounts.spotify.com/api/token';
@@ -25,31 +26,39 @@ export const getArtistId = async (artistName) => {
 	}
 };
 
-export const getArtistSongs = async (artistID) => {
-	var authToken = await getAuthToken();
-	let artistDetailsResponse = await fetch(
-		`${baseUrl}artists/${artistID}/top-tracks`,
-		{
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${authToken}`,
-			},
-		}
-	);
-
-	let data = await artistDetailsResponse.json();
-	console.log('Data returned from searching for songs for artist: ');
-	console.log(data);
-
-	if (data.tracks != null) {
-		let trackList = [];
-		data.tracks.forEach((track) => {
-			trackList.push({ id: track.id, name: track.name });
+export const getArtistSongs = (artistID) => {
+	getAuthToken()
+	.then ()
+	fetch(`${baseUrl}artists/${artistID}/top-tracks`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${authToken}`,
+		},
+	})
+		.then((response) => response.json())
+		.then((json) => {
+			if (json.tracks != null) {
+				let trackList = [];
+				json.tracks.forEach((track) => {
+					trackList.push({ id: track.id, name: track.name });
+				});
+				return trackList;
+			}
 		});
-		console.log('track list: ');
-		console.log(trackList);
-		return trackList;
-	}
+
+	// let data = await artistDetailsResponse.json();
+	// console.log('Data returned from searching for songs for artist: ');
+	// console.log(data);
+
+	// if (data.tracks != null) {
+	// 	let trackList = [];
+	// 	data.tracks.forEach((track) => {
+	// 		trackList.push({ id: track.id, name: track.name });
+	// 	});
+	// 	console.log('track list: ');
+	// 	console.log(trackList);
+	// 	return trackList;
+	// }
 };
 
 export const getLyrics = (songName) => {
@@ -88,7 +97,7 @@ It's all about you
 It's all about you`;
 };
 
-export const getAuthToken = async () => {
+export const getAuthToken = () => {
 	// TODO: add code here to check if we have an unexpired token already, before getting a fresh one
 
 	console.log('getting fresh auth token');
@@ -96,7 +105,7 @@ export const getAuthToken = async () => {
 	var client_id = '2eb5efccbdd64e9daca506b2a9de7e9e';
 	var client_secret = '7f1a0d75767441f7bc7c83bb319d00ea';
 
-	let authTokenResponse = await fetch(loginUrl, {
+	fetch(loginUrl, {
 		method: 'POST',
 		headers: {
 			Authorization:
@@ -108,17 +117,9 @@ export const getAuthToken = async () => {
 		},
 		body: 'grant_type=client_credentials',
 		json: true,
-	});
-
-	let successfulLogin = authTokenResponse.status;
-	if (successfulLogin && !authTokenResponse.ok) {
-		console.log(
-			"got the successful login, but the auth token response wasn't ok: " +
-				authTokenResponse.status
-		);
-		return null;
-	}
-	let data = await authTokenResponse.json();
-	window.localStorage.setItem('token', data.access_token);
-	return data.access_token;
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			window.localStorage.setItem('token', data.access_token);
+		});
 };
