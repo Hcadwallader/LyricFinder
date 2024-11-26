@@ -37,7 +37,7 @@ export default function Selection() {
     // }, []);
 
 	const handleSubmit = (e) => {
-		var lyrics = getLyrics('random song');
+		let lyrics = getLyrics('random song');
 		navigate('/lyrics', { state: { lyrics } });
 	};
 

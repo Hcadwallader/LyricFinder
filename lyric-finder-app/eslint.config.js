@@ -17,6 +17,9 @@ export default [
 				sourceType: 'module',
 			},
 		},
+		env: {
+			node: true,
+		},
 		extends: ['react-app', 'react-app/jest'],
 		settings: { react: { version: '18.3' } },
 		plugins: {
