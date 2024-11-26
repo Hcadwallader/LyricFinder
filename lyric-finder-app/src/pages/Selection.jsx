@@ -38,7 +38,7 @@ export default function Selection() {
 
 	const handleSubmit = (e) => {
 		var lyrics = getLyrics('random song');
-		navigate('/lyrics');
+		navigate('/lyrics', { state: { lyrics } });
 	};
 
 	const handleArtist = (e) => {
