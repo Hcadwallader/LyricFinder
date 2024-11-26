@@ -47,8 +47,6 @@ export default function Selection() {
             .then(songs => {
                 setSongList(songs)
             });
-        // console.log(songs);
-        // setSongList(songs);
     };
 
     const handleSong = (e) => {
