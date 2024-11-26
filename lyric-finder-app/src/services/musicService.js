@@ -59,7 +59,6 @@ const getAuthToken = () => {
 	let client_id = '2eb5efccbdd64e9daca506b2a9de7e9e';
 	let client_secret = '7f1a0d75767441f7bc7c83bb319d00ea';
 
-	process.env.REACT_APP_API_KEY;
 	return fetch(loginUrl, {
 		method: 'POST',
 		headers: {
